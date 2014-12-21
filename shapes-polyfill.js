@@ -1917,7 +1917,43 @@ StylePolyfill.prototype.onStylesLoaded = function(stylesheets) {
     properties.forEach(function(property) {
         re = new RegExp(selector + "(" + property + ")" + value, "ig");
         stylesheets.forEach(function(stylesheet) {
-            while ((match = re.exec(stylesheet.cssText)) !== null) {
+            var cssText = stylesheet.cssText,
+                inMedia = false,
+                curlyCount = 0,
+                i = 0,
+                remove = [],
+                removeFrom,
+                strippedCssText = '';
+            for (i; i < cssText.length; i += 1) {
+                if (inMedia) {
+                    if (cssText[i] == '{') {
+                        curlyCount += (curlyCount == -1) ? 2 : 1;
+                        continue;
+                    }
+                    if (cssText[i] == '}') {
+                        curlyCount -= 1;
+                        continue;
+                    }
+
+                    if (curlyCount == 0) {
+                        inMedia = false;
+                        remove.push([removeFrom, i]);
+                    }
+                    continue;
+                }
+                if (cssText[i] === '@' && cssText[i+1] + cssText[i+2] + cssText[i+3] + cssText[i+4] + cssText[i+5] == 'media') {
+                    inMedia = true;
+                    removeFrom = i;
+                    curlyCount = -1;
+                }
+            }
+            remove.reverse().forEach(function (r) {
+                cssText = cssText.substr(0, r[0]) + cssText.substr(r[1] + 1);
+            });
+            while ((match = re.exec(cssText)) !== null) {
+                if ((/^\s*\@media/).test(match[0])) {
+                    continue;
+                }
                 rules.push({
                     selector: match[1],
                     property: match[2],
