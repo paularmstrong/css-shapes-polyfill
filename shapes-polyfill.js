@@ -103,7 +103,7 @@ Metrics.prototype.toPixels = function(length, percentageBase) {
     return split[1] * this.unitToPx(split[2]);
 };
 
-/* Returns > 0 if the slope of the line through origin and endPoint2 is greater than the slope through 
+/* Returns > 0 if the slope of the line through origin and endPoint2 is greater than the slope through
  * origin and endPoint1. Returns 0 if they have the same slope, negative otherwise.
  */
 function compareLineSlopes(origin, endPoint1, endPoint2) {
@@ -114,7 +114,7 @@ function areCollinearPoints(p0, p1, p2) {
     return Math.abs(compareLineSlopes(p0, p1, p2)) < 350;  // FIXME: threshold is a hack and it's wrong
 }
 
-function areCoincidentPoints(p0, p1) { 
+function areCoincidentPoints(p0, p1) {
     return p0.x == p1.x && p0.y == p1.y;
 }
 
@@ -185,7 +185,7 @@ PolygonEdge.prototype.xIntercept = function(y) {
     return this.vertex1.x + ((y - vertex1Y) * (this.vertex2.x - this.vertex1.x) / (vertex2Y - vertex1Y));
 };
 
-/* Clip the edge line segment to the vertical range y1,y2 and then return 
+/* Clip the edge line segment to the vertical range y1,y2 and then return
  * the clipped line segment's horizontal range as {x1, x2}, where x2 >= x1;
  * This method assumes that this edge overlaps y1,y2.
 */
@@ -211,7 +211,7 @@ PolygonEdge.prototype.clippedEdgeXRange = function(y1, y2) {
     return {x1: Math.min(xForY1, xForY2), x2: Math.max(xForY1, xForY2)};
 };
 
-/* Clip the circle to the vertical range y1,y2 and return the extent of the clipped circle's 
+/* Clip the circle to the vertical range y1,y2 and return the extent of the clipped circle's
  * projection on the X axis as {x1, x2}, where x2 >= x1. This method assumes that the circle
  * overlaps y1, y2.
 */
@@ -458,7 +458,7 @@ Polygon.prototype.leftExclusionEdge = function(y1, y2) { // y2 >= y1
     var shapeMargin = this.shapeMargin;
     if (shapeMargin > 0) {
         var overlappingVertices = this.edgeVerticesThatOverlapYRange(y1 - shapeMargin, y2 + shapeMargin);
-        overlappingVertices.sort(compareVertexXIncreasing); 
+        overlappingVertices.sort(compareVertexXIncreasing);
 
         for (i = 0; i < overlappingVertices.length; i++) {
             // FIXME: short-circuit
@@ -498,7 +498,7 @@ Polygon.prototype.rightExclusionEdge = function (y1, y2) { // y2 >= y1
     var shapeMargin = this.shapeMargin;
     if (shapeMargin > 0) {
         var overlappingVertices = this.edgeVerticesThatOverlapYRange(y1 - shapeMargin, y2 + shapeMargin);
-        overlappingVertices.sort(compareVertexXDecreasing); 
+        overlappingVertices.sort(compareVertexXDecreasing);
 
         for (i = 0; i < overlappingVertices.length; i++) {
             // FIXME: short-circuit
@@ -759,10 +759,10 @@ Size.prototype.scale = function(factor) {
     this.height *= factor;
 };
 
-function Rect(x, y, width, height) { 
+function Rect(x, y, width, height) {
     this.x = x;
-    this.y = y; 
-    this.width = width; 
+    this.y = y;
+    this.width = width;
     this.height = height;
     this.maxX = x + width;
     this.maxY = y + height;
@@ -774,12 +774,12 @@ Rect.prototype.containsX = function(x) { return x >= this.x && x < this.maxX; };
 Rect.prototype.containsY = function(y) { return y >= this.y && y < this.maxY; };
 Rect.prototype.containsPoint = function(p) { return this.containsX(p.x) && this.containsY(p.y); };
 
-Rect.prototype.shiftLeftEdgeTo = function(newX) { 
+Rect.prototype.shiftLeftEdgeTo = function(newX) {
     this.width -= newX - this.x;
     this.x = newX;
 };
 
-Rect.prototype.shiftTopEdgeTo = function(newY) { 
+Rect.prototype.shiftTopEdgeTo = function(newY) {
     this.height -= newY - this.y;
     this.y = newY;
 };
@@ -804,33 +804,33 @@ RoundedRect.prototype.isEmpty = function() { return this.width <= 0 || this.heig
 
 RoundedRect.prototype.topLeftCorner = function() {
     return new Rect(
-        this.rect.x, 
-        this.rect.y, 
-        this.radii.topLeft.width, 
-        this.radii.topLeft.height); 
+        this.rect.x,
+        this.rect.y,
+        this.radii.topLeft.width,
+        this.radii.topLeft.height);
 };
 
 RoundedRect.prototype.topRightCorner = function() {
     return new Rect(
-        this.rect.maxX - this.radii.topRight.width, 
-        this.rect.y, 
-        this.radii.topRight.width, 
+        this.rect.maxX - this.radii.topRight.width,
+        this.rect.y,
+        this.radii.topRight.width,
         this.radii.topRight.height);
 };
 
 RoundedRect.prototype.bottomLeftCorner = function() {
     return new Rect(
-        this.rect.x, 
-        this.rect.maxY - this.radii.bottomLeft.height, 
-        this.radii.bottomLeft.width, 
+        this.rect.x,
+        this.rect.maxY - this.radii.bottomLeft.height,
+        this.radii.bottomLeft.width,
         this.radii.bottomLeft.height);
 };
 
 RoundedRect.prototype.bottomRightCorner = function() {
     return new Rect(
-        this.rect.maxX - this.radii.bottomRight.width, 
-        this.rect.maxY - this.radii.bottomRight.height, 
-        this.radii.bottomRight.width, 
+        this.rect.maxX - this.radii.bottomRight.width,
+        this.rect.maxY - this.radii.bottomRight.height,
+        this.radii.bottomRight.width,
         this.radii.bottomRight.height);
 };
 
@@ -923,13 +923,13 @@ RoundedRect.prototype.minXInterceptAt = function(y, noInterceptReturnValue) {
     if (topLeftCorner.containsY(y)) {
         yi = topLeftCorner.maxY - y;
         return topLeftCorner.maxX  - ellipseXIntercept(yi, topLeftCorner.width, topLeftCorner.height);
-    } 
+    }
 
     var bottomLeftCorner = this.bottomLeftCorner();
     if (bottomLeftCorner.containsY(y)) {
         yi = y - bottomLeftCorner.y;
         return bottomLeftCorner.maxX - ellipseXIntercept(yi, bottomLeftCorner.width, bottomLeftCorner.height);
-    } 
+    }
 
     return this.rect.x;
 };
@@ -942,13 +942,13 @@ RoundedRect.prototype.maxXInterceptAt = function(y, noInterceptReturnValue) {
     if (topRightCorner.containsY(y)) {
         yi = topRightCorner.maxY - y;
         return topRightCorner.x + ellipseXIntercept(yi, topRightCorner.width, topRightCorner.height);
-    } 
+    }
 
     var bottomRightCorner = this.bottomRightCorner();
     if (bottomRightCorner.containsY(y)) {
         yi = y - bottomRightCorner.y;
         return bottomRightCorner.x + ellipseXIntercept(yi, bottomRightCorner.width, bottomRightCorner.height);
-    } 
+    }
 
     return this.rect.maxX;
 };
@@ -1309,7 +1309,7 @@ Polyfill.prototype.polyfill = function(element, settings) {
     // ideally this would default to lineHeight, but 'normal' is a valid computed value
     // and is up to the UA
     var step = settings && settings.step || parseInt(computedStyle.fontSize); // used when mode is "step"
-    var mode = settings && settings.mode || "adaptive";  
+    var mode = settings && settings.mode || "adaptive";
     var limit = settings && settings.limit || step * 1.8;
     var shapeInfo = new ShapeInfo(element);
 
